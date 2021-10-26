@@ -7,10 +7,9 @@ class App extends React.Component {
     render() {
         return (
             <React.Fragment>
-                <Header />
+                <Header nickname="Admin" />
             </React.Fragment>
-        )
-            ;
+        );
     }
 }
 
