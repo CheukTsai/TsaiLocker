@@ -2,25 +2,25 @@ import React from 'react';
 
 class Login extends React.Component {
 
-  emailRef = React.createRef()
-  passwordRef = React.createRef()
-
+  //State
+  state = {
+    email: '',
+    password: ''
+  }
   handleSubmit = event => {
     //prevent default action
     event.preventDefault();
-
-    //acquire form data
-    console.log(this.emailRef.current.value)
-    const formData = {
-      email: this.emailRef.current.value,
-      password: this.passwordRef.current.value
-    };
-    console.log(formData)
 
     //switch to home page
     this.props.history.push('/')
   }
 
+  handleChange = e => {
+    console.log(e.target.name);
+    this.setState({
+      [e.target.name]: e.target.value
+    })
+  }
 
   render() {
     return (
@@ -29,13 +29,13 @@ class Login extends React.Component {
           <div className="field">
             <label className="label">Email</label>
             <div className="control">
-              <input className="input" type="text" placeholder="Email" ref={this.emailRef} />
+              <input className="input" type="text" placeholder="Email" name="email" value={this.state.email} onChange={this.handleChange} />
             </div>
           </div>
           <div className="field">
             <label className="label">Password</label>
             <div className="control">
-              <input className="input" type="password" placeholder="Password" ref={this.passwordRef} />
+              <input className="input" type="password" placeholder="Password" name="password" value={this.state.password} onChange={this.handleChange} />
             </div>
           </div>
           <div className="control">
