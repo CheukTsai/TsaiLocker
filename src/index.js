@@ -1,8 +1,8 @@
 import React from 'react';
-import Login from './components/login'
-import App from './components/app.js'
-import ReactDom from 'react-dom';
+import ReactDOM from 'react-dom';
+import Router from 'Router';
+import 'css/app.scss';
+import 'css/style.scss';
 
+ReactDOM.render(<Router />, document.getElementById('root'));
 
-
-ReactDom.render(<App />, document.getElementById('root'));
