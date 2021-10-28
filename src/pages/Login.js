@@ -44,7 +44,6 @@ class Login extends React.Component {
         </form>
       </div>
     );
-    // JSX  Babel  Emmet
   }
 }
 
