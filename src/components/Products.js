@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'commons/axios';
+import { CSSTransition, TransitionGroup } from 'react-transition-group'
 import ToolBox from 'components/ToolBox';
 import Product from 'components/Product';
 
@@ -51,14 +52,22 @@ class Products extends React.Component {
         <ToolBox search={this.search} />
         <div className="products">
           <div className="columns is-multiline is-desktop">
-            {
-              this.state.products.map(p => {
-                return (
-                  <div className="column is-3" key={p.id}>
-                    <Product product={p} />
-                  </div>)
-              })
-            }
+
+            {/* TransitionGroup will automatically generate a <div>, set component null*/}
+            <TransitionGroup component={null}>
+              {
+                this.state.products.map(p => {
+                  return (
+                    <CSSTransition classNames="product-fade" timeout={500} key={p.id}>
+                      <div className="column is-3" key={p.id}>
+
+                        <Product product={p} />
+                      </div>
+                    </CSSTransition>
+                  )
+                })
+              }
+            </TransitionGroup>
             {/* <div className="column is-3">
               <Product product={this.product} />
             </div> */}
