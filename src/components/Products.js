@@ -52,9 +52,24 @@ class Products extends React.Component {
     Panel.open({
       component: AddInvertory,
       callback: data => {
-        console.log(data)
+        if (data) {
+          this.add(data)
+        }
       }
     });
+  }
+
+  add = product => {
+    // Both should be updated
+    const _products = [...this.state.products]
+    _products.push(product)
+    const _dProducts = [...this.state.defaultProducts]
+    _dProducts.push(product)
+
+    this.setState({
+      products: _products,
+      defaultProducts: _dProducts
+    })
   }
 
   render() {
