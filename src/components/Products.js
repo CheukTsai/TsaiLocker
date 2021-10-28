@@ -5,7 +5,8 @@ import Product from 'components/Product';
 
 class Products extends React.Component {
   state = {
-    products: []
+    products: [],
+    defaultProducts: []  // for search engine reboot
   }
 
   componentDidMount() {
@@ -20,15 +21,34 @@ class Products extends React.Component {
     // use AXIOS instead of built-in fetch
     axios.get('/products').then(response => {
       this.setState({
-        products: response.data
+        products: response.data,
+        defaultProducts: response.data
       })
+    })
+  }
+
+  search = text => {
+    console.log(text);
+
+    // 1. Get a new Array of products
+    let _products = [...this.state.defaultProducts]
+
+    // 2. Filter new array
+    _products = _products.filter(p => {
+      const matchArray = p.name.match(new RegExp(text, 'gi'))
+      return !!matchArray
+    })
+
+    // 3. setstate with filtered array
+    this.setState({
+      products: _products
     })
   }
 
   render() {
     return (
       <div>
-        <ToolBox />
+        <ToolBox search={this.search} />
         <div className="products">
           <div className="columns is-multiline is-desktop">
             {
