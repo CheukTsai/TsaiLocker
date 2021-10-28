@@ -3,6 +3,8 @@ import axios from 'commons/axios';
 import { CSSTransition, TransitionGroup } from 'react-transition-group'
 import ToolBox from 'components/ToolBox';
 import Product from 'components/Product';
+import Panel from 'components/Panel';
+import AddInvertory from 'components/AddInvertory';
 
 class Products extends React.Component {
   state = {
@@ -46,13 +48,21 @@ class Products extends React.Component {
     })
   }
 
+  toAdd = () => {
+    Panel.open({
+      component: AddInvertory,
+      callback: data => {
+        console.log(data)
+      }
+    });
+  }
+
   render() {
     return (
       <div>
         <ToolBox search={this.search} />
         <div className="products">
           <div className="columns is-multiline is-desktop">
-
             {/* TransitionGroup will automatically generate a <div>, set component null*/}
             <TransitionGroup component={null}>
               {
@@ -68,26 +78,10 @@ class Products extends React.Component {
                 })
               }
             </TransitionGroup>
-            {/* <div className="column is-3">
-              <Product product={this.product} />
-            </div> */}
-            {/* <div className="column is-3">
-              <Product />
-            </div>
-            <div className="column is-3">
-              <Product />
-            </div>
-            <div className="column is-3">
-              <Product />
-            </div>
-            <div className="column is-3">
-              <Product />
-            </div> */}
           </div>
+          <button className="button is-primary add-btn" onClick={this.toAdd}>add</button>
         </div>
       </div>
-
-
     );
   }
 }
