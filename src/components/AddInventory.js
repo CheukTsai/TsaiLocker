@@ -1,7 +1,8 @@
 import React from 'react';
 import axios from 'commons/axios'
+import { toast } from 'react-toastify'
 
-class AddInvertory extends React.Component {
+class AddInventory extends React.Component {
 
     state = {
         name: '',
@@ -9,7 +10,7 @@ class AddInvertory extends React.Component {
         price: '',
         tags: '',
         image: '',
-        status: 'available'
+        status: ''
     }
 
     initialState = {
@@ -17,20 +18,21 @@ class AddInvertory extends React.Component {
         price: '',
         tags: '',
         image: '',
-        status: 'available'
+        status: ''
     }
 
     submit = e => {
         e.preventDefault();
         const product = { ...this.state }
-        if (product.name === '' || product.price === '' || product.tags === '' || product.image === '') {
-            alert('Please select')
+        if (product.name === '' || product.price === '' || product.tags === '' || product.image === '' || product.status === '') {
+            toast.warning('You miss some information!')
         } else {
             //  post to database
             axios.post('products', product).then(res => {
                 console.log(res.data)
                 // push to Products state, auto refresh page
                 this.props.close(res.data)
+                toast.success('You have successfully add product: ' + res.data.name + ' !')
                 // reset empty
                 this.setState(this.initialState)
             })
@@ -81,6 +83,7 @@ class AddInvertory extends React.Component {
                         <label className="label">Status</label>
                         <div className="select is-fullwidth">
                             <select name="status" value={this.state.status} onChange={this.handleChange}>
+                                <option></option>
                                 <option>available</option>
                                 <option>unavailable</option>
                             </select>
@@ -101,4 +104,4 @@ class AddInvertory extends React.Component {
     }
 }
 
-export default AddInvertory;
+export default AddInventory;
