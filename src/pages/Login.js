@@ -1,50 +1,123 @@
 import React from 'react';
+import { useForm } from 'react-hook-form'
 
-class Login extends React.Component {
+// I am using react form hook here, functional component is needed
 
-  //State
-  state = {
-    email: '',
-    password: ''
+export default function Login(props) {
+
+  const { register, handleSubmit, formState: { errors } } = useForm();
+
+  const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+  const onSubmit = data => {
+    console.log(data)
   }
-  handleSubmit = event => {
-    //prevent default action
-    event.preventDefault();
+  console.log(errors)
 
-    //switch to home page
-    this.props.history.push('/')
-  }
-
-  handleChange = e => {
-    console.log(e.target.name);
-    this.setState({
-      [e.target.name]: e.target.value
-    })
-  }
-
-  render() {
-    return (
-      <div className="login-wrapper">
-        <form className="box login-box" onSubmit={this.handleSubmit}>
-          <div className="field">
-            <label className="label">Email</label>
-            <div className="control">
-              <input className="input" type="text" placeholder="Email" name="email" value={this.state.email} onChange={this.handleChange} />
-            </div>
-          </div>
-          <div className="field">
-            <label className="label">Password</label>
-            <div className="control">
-              <input className="input" type="password" placeholder="Password" name="password" value={this.state.password} onChange={this.handleChange} />
-            </div>
-          </div>
+  return (
+    <div className="login-wrapper">
+      <form className="box login-box" onSubmit={handleSubmit(onSubmit)}>
+        <div className="field">
+          <label className="label">Email</label>
           <div className="control">
-            <button className="button is-fullwidth is-primary">Login</button>
+            <input
+              //  notify empty
+              className={`input ${errors.email && 'is-danger'}`}
+              type="text"
+              placeholder="Email"
+              name="email"
+              {...register("email", {
+                required: 'Email is required',
+                pattern: {
+                  value: re,
+                  message: 'Invalid Email'
+                }
+              })}
+            />
+            {errors.email &&
+              <p className="helper has-text-danger">
+                {errors.email.message}
+              </p>
+            }
           </div>
-        </form>
-      </div>
-    );
-  }
+        </div>
+        <div className="field">
+          <label className="label">Password</label>
+          <div className="control">
+            <input className={`input ${errors.password && 'is-danger'}`}
+              type="password"
+              placeholder="Password"
+              name="password"
+              {...register("password", {
+                required: 'Password is required',
+                minLength: {
+                  value: 6,
+                  message: 'Password no less than 6 digits' // JS only: <p>error message</p> TS only support string
+                }
+              })}
+            />
+            {errors.password &&
+              <p className="helper has-text-danger">
+                {errors.password.message}
+              </p>
+            }
+          </div>
+        </div>
+        <div className="control">
+          <button className="button is-fullwidth is-primary">Login</button>
+        </div>
+      </form>
+    </div>
+  )
 }
 
-export default Login;
+//Old version
+
+
+// class Login extends React.Component {
+
+//   //State
+//   state = {
+//     email: '',
+//     password: ''
+//   }
+//   handleSubmit = event => {
+//     //prevent default action
+//     event.preventDefault();
+
+//     //switch to home page
+//     this.props.history.push('/')
+//   }
+
+//   handleChange = e => {
+//     console.log(e.target.name);
+//     this.setState({
+//       [e.target.name]: e.target.value
+//     })
+//   }
+
+//   render() {
+//     return (
+//       <div className="login-wrapper">
+//         <form className="box login-box" onSubmit={this.handleSubmit}>
+//           <div className="field">
+//             <label className="label">Email</label>
+//             <div className="control">
+//               <input className="input" type="text" placeholder="Email" name="email" value={this.state.email} onChange={this.handleChange} />
+//             </div>
+//           </div>
+//           <div className="field">
+//             <label className="label">Password</label>
+//             <div className="control">
+//               <input className="input" type="password" placeholder="Password" name="password" value={this.state.password} onChange={this.handleChange} />
+//             </div>
+//           </div>
+//           <div className="control">
+//             <button className="button is-fullwidth is-primary">Login</button>
+//           </div>
+//         </form>
+//       </div>
+//     );
+//   }
+// }
+
+// export default Login;
