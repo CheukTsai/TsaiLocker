@@ -9,6 +9,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import 'css/app.scss';
 import 'css/style.scss';
 
+import 'commons/auth'
+
 ReactDOM.render(
     <div>
         <ToastContainer
@@ -18,7 +20,7 @@ ReactDOM.render(
             newestOnTop={false}
             closeOnClick
             rtl={false}
-            pauseOnFocusLoss
+            pauseOnVisibilityChange
             draggable
             pauseOnHover
         />

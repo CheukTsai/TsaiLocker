@@ -1,5 +1,7 @@
 import React from 'react';
+import axios from 'commons/axios'
 import { useForm } from 'react-hook-form'
+import { toast } from 'react-toastify'
 
 // I am using react form hook here, functional component is needed
 
@@ -7,11 +9,22 @@ export default function Login(props) {
 
   const { register, handleSubmit, formState: { errors } } = useForm();
 
+  // email regex
   const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-  const onSubmit = data => {
-    console.log(data)
-  }
-  console.log(errors)
+  const onSubmit = async data => {
+    try {
+      const { email, password } = data;
+      const res = await axios.post('/auth/login', { email, password });
+      const jwToken = res.data;
+      global.auth.setToken(jwToken);
+      toast.success('Login Success');
+      props.history.push('/');
+    } catch (error) {
+      const message = error.response.data.message;
+      toast.error(message);
+    }
+  };
+
 
   return (
     <div className="login-wrapper">
