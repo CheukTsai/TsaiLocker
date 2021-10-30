@@ -89,6 +89,7 @@ class AddInventory extends React.Component {
                             </select>
                         </div>
                     </div>
+                    <br />
                     <div className="field is-grouped is-grouped-centered">
                         <div className="control">
                             <button className="button is-link">Submit</button>
