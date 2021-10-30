@@ -1,5 +1,6 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom'
+import { toast } from 'react-toastify';
 
 class ToolBox extends React.Component {
 
@@ -25,6 +26,11 @@ class ToolBox extends React.Component {
     //fulfill search should be in projects.js in order to filter products
 
     goCart = () => {
+        if (!global.auth.isLogin()) {
+            this.props.history.push("/login")
+            toast.info("Please login first")
+            return;
+        }
         this.props.history.push("/cart")
     }
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import Panel from 'components/Panel'
 import axios from 'commons/axios';
+import { withRouter } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { formatPrice } from 'commons/helper';
 import EditInventory from 'components/EditInventory';
@@ -25,6 +26,11 @@ class Product extends React.Component {
 
     // Add cart function
     addCart = async () => {
+        if (!global.auth.isLogin()) {
+            this.props.history.push("/login")
+            toast.info("Please login first")
+            return;
+        }
         try {
             const { id, name, image, price } = this.props.product;
             const res = await axios.get(`/carts?productId=${id}`);
@@ -51,6 +57,18 @@ class Product extends React.Component {
 
     }
 
+    renderManagerButtons = () => {
+        const user = global.auth.getUser() || {}
+        if (user.type === 1) {
+            return (
+                <div className="p-head has-text-right" onClick={this.toEdit}>
+                    <span className="icon edit-btn">
+                        <i className="fas fa-sliders-h"></i>
+                    </span>
+                </div>
+            )
+        }
+    }
     render() {
         const { name, image, tags, price, status } = this.props.product;
 
@@ -61,11 +79,7 @@ class Product extends React.Component {
         return (
             <div className={_pClass[status]}>
                 <div className="p-content">
-                    <div className="p-head has-text-right" onClick={this.toEdit}>
-                        <span className="icon edit-btn">
-                            <i className="fas fa-sliders-h"></i>
-                        </span>
-                    </div>
+                    {this.renderManagerButtons()}
                     <div className="img-wrapper">
                         <div className="out-stock-text">Out of stock</div>
                         <figure className="image is-4by3">
@@ -87,4 +101,4 @@ class Product extends React.Component {
     }
 }
 
-export default Product;
+export default withRouter(Product);
