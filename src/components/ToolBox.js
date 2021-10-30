@@ -1,4 +1,5 @@
 import React from 'react';
+import { withRouter } from 'react-router-dom'
 
 class ToolBox extends React.Component {
 
@@ -23,6 +24,11 @@ class ToolBox extends React.Component {
 
     //fulfill search should be in projects.js in order to filter products
 
+    goCart = () => {
+        this.props.history.push("/cart")
+    }
+
+
     render() {
         return (
             <div className="tool-box">
@@ -45,13 +51,13 @@ class ToolBox extends React.Component {
                         </div>
                     </div>
                 </div>
-                <div className="cart-box">
-                    <i className="fas fa-shopping-cart"></i>
-                    <span className="cart-num">(0)</span>
+                <div to="/cart" className="cart-box" onClick={this.goCart}>
+                    <i className="fas fa-shopping-cart" ></i>
+                    <span className="cart-num">({this.props.cartNum})</span>
                 </div>
             </div>
         );
     }
 }
 
-export default ToolBox;
+export default withRouter(ToolBox);

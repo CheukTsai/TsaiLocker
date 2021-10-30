@@ -1,5 +1,7 @@
 import React from 'react';
 import Panel from 'components/Panel'
+import axios from 'commons/axios';
+import { toast } from 'react-toastify'
 import { formatPrice } from 'commons/helper';
 import EditInventory from 'components/EditInventory';
 
@@ -10,7 +12,8 @@ class Product extends React.Component {
         Panel.open({
             component: EditInventory,
             props: {
-                product: this.props.product
+                product: this.props.product,
+                deleteProduct: this.props.delete
             },
             callback: data => {
                 if (data) {
@@ -19,6 +22,34 @@ class Product extends React.Component {
             }
         });
     };
+
+    // Add cart function
+    addCart = async () => {
+        try {
+            const { id, name, image, price } = this.props.product;
+            const res = await axios.get(`/carts?productId=${id}`);
+            const carts = res.data;
+            if (carts && carts.length > 0) {
+                const cart = carts[0]
+                cart.amount += 1
+                await axios.put(`/carts/${cart.id}`, cart)
+            } else {
+                const cart = {
+                    productId: id,
+                    name: name,
+                    image: image,
+                    price: price,
+                    amount: 1
+                }
+                await axios.post(`/carts`, cart)
+            }
+            toast.success("Add to cart successfully")
+            this.props.updateCartNum();
+        } catch (err) {
+            toast.error("Add cart error")
+        }
+
+    }
 
     render() {
         const { name, image, tags, price, status } = this.props.product;
@@ -46,7 +77,7 @@ class Product extends React.Component {
                 </div>
                 <div className="p-footer">
                     <p className="price">{formatPrice(price)}</p>
-                    <button className="add-cart" disabled={status === 'unavailable'}>
+                    <button className="add-cart" disabled={status === 'unavailable'} onClick={this.addCart}>
                         <i className="fas fa-shopping-cart"></i>
                         <i className="fas fa-exclamation"></i>
                     </button>

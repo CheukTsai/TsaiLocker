@@ -9,7 +9,8 @@ import AddInventory from 'components/AddInventory';
 class Products extends React.Component {
   state = {
     products: [],
-    sourceProducts: []
+    sourceProducts: [],
+    cartNum: 0
   };
 
   componentDidMount() {
@@ -19,6 +20,8 @@ class Products extends React.Component {
         sourceProducts: response.data
       });
     });
+    // should have the cartnumber updated when first loaded
+    this.updateCartNum()
   }
 
   // search
@@ -76,10 +79,33 @@ class Products extends React.Component {
     });
   };
 
+  delete = id => {
+    const _products = this.state.products.filter(p => p.id !== id)
+    const _sProducts = this.state.sourceProducts.filter(p => p.id !== id)
+    this.setState({
+      products: _products,
+      sourceProducts: _sProducts
+    });
+  }
+
+  updateCartNum = async () => {
+    const cartNum = await this.initCartNum();
+    this.setState({
+      cartNum: cartNum
+    })
+  }
+
+  initCartNum = async () => {
+    const res = await axios.get('/carts')
+    const carts = res.data || []
+    const cartNum = carts.map(cart => cart.amount).reduce((acc, value) => acc + value, 0)
+    return cartNum;
+  }
+
   render() {
     return (
       <div>
-        <ToolBox search={this.search} />
+        <ToolBox search={this.search} cartNum={this.state.cartNum} />
         <div className="products">
           <div className="columns is-multiline is-desktop">
             <TransitionGroup component={null}>
@@ -91,7 +117,7 @@ class Products extends React.Component {
                     key={p.id}
                   >
                     <div className="column is-3" key={p.id}>
-                      <Product product={p} update={this.update} />
+                      <Product product={p} update={this.update} delete={this.delete} updateCartNum={this.updateCartNum} />
                     </div>
                   </CSSTransition>
                 );
