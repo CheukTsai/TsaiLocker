@@ -43,5 +43,6 @@ global.auth = {
     setToken,
     getUser,
     logout,
-    isLogin
+    isLogin,
+    getToken
 };

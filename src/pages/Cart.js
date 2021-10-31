@@ -11,7 +11,8 @@ const Cart = () => {
 
     // effective when render, use an empty array here
     useEffect(() => {
-        axios.get('/carts').then(res => setCarts(res.data))
+        const user = global.auth.getUser() || {};
+        axios.get(`/carts?userId=${user.email}`).then(res => setCarts(res.data))
     }, [])
 
     const totalPrice = useMemo(() => {
